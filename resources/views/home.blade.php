@@ -7,14 +7,14 @@
             <div class="card">
                 <style>
                     a {
-                        color:rgb(92, 0, 52);
+                        color:rgb(92, 0, 52) !important;
                     }
 
                     a:hover,
                     a:visited,
                     a:focus,
                     a:active {
-                        color: rgb(112,32,77);
+                        color: rgb(112,32,77) !important;
                     }
 
                     .btn-primary {
@@ -29,10 +29,11 @@
                         background-color: rgb(112,32,77) !important;
                         border-color: rgb(112,32,77) !important;
                     }
-                    
                 </style>
                 @if (Auth::user()->isInARoom())
-                    <?php $room = Auth::user()->Room() ?>
+                    <?php $room = Auth::user()->Room() 
+                        // cringe at me all you want =)) it's just a mini-project done in a evening of boredom
+                    ?>
                     <div class="card-header">Dashboard</div>
                     <div class="card-body">
                         @if(Session::has('error'))
@@ -89,11 +90,24 @@
                                 @foreach ($room->Transactions() as $item)
                                     <li class="list-group-item mb-4 border-top">
                                         <div class="row">
-                                            <div class="col-3" style="display: flex; align-items: center; justify-content: center;">
-                                                <span class="mr-2 text-{{ \App\User::find($item->from)->id != \Auth::user()->id ? 'success' : 'danger'}}" style="font-size: 45px;">{{ $item->ammount }}</span>
-                                                <img src="/curr-{{ \App\User::find($item->from)->id != \Auth::user()->id ? 'green' : 'red'}}.png" alt="" height="45px" width="45px">
+                                            <?php 
+                                                $from = \App\User::find($item->from)->id;
+                                                $to = \App\User::find($item->to)->id;
+                                                $me = \Auth::user()->id;
+
+                                                if ($from !== $me && $to !== $me) {
+                                                    $state = '';
+                                                } elseif ($from === $me) {
+                                                    $state = '-danger';
+                                                } else {
+                                                    $state = '-success';
+                                                }
+                                            ?>
+                                            <div class="col-4" style="display: flex; align-items: center; justify-content: center;">
+                                                <span class="mr-2 text{{ $state }}" style="font-size: 45px;">{{ $item->ammount }}</span>
+                                                <img src="/curr{{ $state }}.png" alt="" height="45px" width="45px">
                                             </div>
-                                            <div class="col-9">
+                                            <div class="col-8">
                                                 <p class="mb-1"><span class="text-danger">{{ \App\User::find($item->from)->name }}</span> &rarr; <span class="text-success">{{ \App\User::find($item->to)->name }}</span></p>
                                                 <hr>
                                                 <p class="mb-1 font-italic">{{ $item->reason }}</p>

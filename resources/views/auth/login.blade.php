@@ -6,7 +6,20 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
-
+                <style>
+                    .btn-primary {
+                        background-color: rgb(92, 0, 52) !important;
+                        border-color:rgb(92, 0, 52) !important;
+                    }
+                    
+                    .btn-primary:hover,
+                    .btn-primary:active,
+                    .btn-primary:focus,
+                    .btn-primary:visited {
+                        background-color: rgb(112,32,77) !important;
+                        border-color: rgb(112,32,77) !important;
+                    }
+                </style>
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf

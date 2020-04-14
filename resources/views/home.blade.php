@@ -47,7 +47,13 @@
                             </div>
                         @endif
                         @if(\Auth::user()->ammount > 0 && $room->Users()->count() > 1)
-                            <form action=" {{ route('transaction') }}" method="post">
+                            <form action=" {{ route('transaction') }}" method="post" onsubmit="return disableSubmiting(this);">
+                            <script>
+                                function disableSubmiting(form) {
+                                    form.btn.disabled = true;
+                                    return true;
+                                }
+                            </script>
                                 @csrf
                                 <div class="form-group">
                                     <label for="user">User:</label>
@@ -72,7 +78,7 @@
                                     <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="Something nice..." required></textarea>
                                 </div>
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary" name="btn">Submit</button>
                                 </div>
                             </form>
                         @elseif (!\Auth::user()->ammount > 0)
@@ -158,7 +164,10 @@
                                 <label for="password">Password</label>
                                 <input type="text" class="form-control" name="password" id="password" placeholder="Enter password">
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+			    <button type="submit" onclick="submitTransaction()" class="btn btn-primary">Submit</button>
+			    <script>
+				e.targetEvent.disabled = true;
+			    </script>
                         </form>
                     </div>
                 @endif
